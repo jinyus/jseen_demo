@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:jseen/jseen.dart';
+import 'package:jseen_demo/new_tree.dart';
 
 void main() {
   runApp(const MyApp());
@@ -75,11 +76,11 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Container(
               decoration:
                   BoxDecoration(border: Border.all(color: Colors.white)),
-              child: JSeenTree(
-                json: json,
+              child: JTree(
+                json,
                 key: ValueKey(json.hashCode),
-                indent: 20,
-                errorWidget: Text('ERROR!!!'),
+                // indent: 20,
+                // errorWidget: Text('ERROR!!!'),
                 theme: JSeenTheme(
                   keyStyle: TextStyle(color: Colors.purple.shade200),
                   stringStyle: TextStyle(color: Colors.yellow),
@@ -92,6 +93,17 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+// JSeenTree(
+//   json: json,
+//   key: ValueKey(json.hashCode),
+//   indent: 20,
+//   errorWidget: Text('ERROR!!!'),
+//   theme: JSeenTheme(
+//     keyStyle: TextStyle(color: Colors.purple.shade200),
+//     stringStyle: TextStyle(color: Colors.yellow),
+//   ),
+// )
 
 const jsonString = """{
     "name": "Bob Pillage",

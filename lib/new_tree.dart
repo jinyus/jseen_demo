@@ -27,20 +27,23 @@ class _JTreeState extends State<JTree> {
   @override
   void initState() {
     super.initState();
-    try {
-      nodes = [mapEntryToNode(jsonDecode(widget.json))];
-    } catch (e, s) {
-      if (kDebugMode) {
-        print('encoding failed: $e\n$s');
-      }
-      failed = true;
-    }
+    // try {
+    //   nodes = [mapEntryToNode(jsonDecode(widget.json))];
+    // } catch (e, s) {
+    //   if (kDebugMode) {
+    //     print('encoding failed: $e\n$s');
+    //   }
+    //   failed = true;
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
-    return TreeView(
-      nodes: nodes,
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: SingleChildScrollView(
+        child: buildTree(),
+      ),
     );
   }
 
@@ -88,6 +91,36 @@ class _JTreeState extends State<JTree> {
         ),
       );
     }
+  }
+
+  // https://github.com/google/flutter.widgets/blob/a10a102e8b971b132402ac3c42da364b6bc86dba/packages/flutter_simple_treeview/example/lib/trees/tree_from_json.dart#L67
+  Widget buildTree() {
+    try {
+      var parsedJson = json.decode(widget.json);
+      return TreeView(
+        nodes: toTreeNodes(parsedJson),
+      );
+    } on FormatException catch (e) {
+      return Text(e.message);
+    }
+  }
+
+  List<TreeNode> toTreeNodes(dynamic parsedJson) {
+    if (parsedJson is Map<String, dynamic>) {
+      return parsedJson.keys
+          .map((k) => TreeNode(
+              content: Text('$k:'), children: toTreeNodes(parsedJson[k])))
+          .toList();
+    }
+    if (parsedJson is List<dynamic>) {
+      return parsedJson
+          .asMap()
+          .map((i, element) => MapEntry(i,
+              TreeNode(content: Text('[$i]:'), children: toTreeNodes(element))))
+          .values
+          .toList();
+    }
+    return [TreeNode(content: Text(parsedJson.toString()))];
   }
 }
 
