@@ -22,29 +22,40 @@ class JTree extends StatefulWidget {
 
 class _JTreeState extends State<JTree> {
   late List<TreeNode> nodes;
+  final TreeController _treeController =
+      TreeController(allNodesExpanded: false);
 
   bool failed = false;
   @override
   void initState() {
     super.initState();
-    // try {
-    //   nodes = [mapEntryToNode(jsonDecode(widget.json))];
-    // } catch (e, s) {
-    //   if (kDebugMode) {
-    //     print('encoding failed: $e\n$s');
-    //   }
-    //   failed = true;
-    // }
+    try {
+      nodes = [mapEntryToNode(jsonDecode(widget.json))];
+    } catch (e, s) {
+      if (kDebugMode) {
+        print('encoding failed: $e\n$s');
+      }
+      nodes = [];
+      failed = true;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: SingleChildScrollView(
-        child: buildTree(),
-      ),
-    );
+    return failed
+        ? const Center(
+            child: Text('Error'),
+          )
+        : SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: SingleChildScrollView(
+              child: TreeView(
+                nodes: nodes,
+                indent: 20,
+                treeController: _treeController,
+              ),
+            ),
+          );
   }
 
   TreeNode mapEntryToNode(dynamic entry) {

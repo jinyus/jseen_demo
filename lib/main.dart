@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:android_battery_optimization/android_battery_optimization.dart';
 import 'package:flutter/material.dart';
 import 'package:jseen/jseen.dart';
 import 'package:jseen_demo/new_tree.dart';
@@ -78,6 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   BoxDecoration(border: Border.all(color: Colors.white)),
               child: JTree(
                 json,
+                // must be used to force initState to run again
                 key: ValueKey(json.hashCode),
                 // indent: 20,
                 // errorWidget: Text('ERROR!!!'),
